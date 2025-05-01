@@ -8,19 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Star, Truck, Package, Clock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/hooks/useCart";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = getProductById(id || "");
   const [quantity, setQuantity] = useState(1);
-  const { toast } = useToast();
+  const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-    toast({
-      title: "Added to cart",
-      description: `${quantity} × ${product?.title} added to your cart`,
-    });
+    if (product) {
+      addToCart(product.id, quantity);
+    }
   };
 
   if (!product) {
@@ -134,9 +133,11 @@ const ProductDetail = () => {
                   Add to Cart
                 </Button>
                 
-                <Button className="flex-1 bg-marketplace-accent hover:bg-marketplace-accent/90 text-white py-6">
-                  Buy Now
-                </Button>
+                <Link to="/cart" className="flex-1">
+                  <Button className="w-full bg-marketplace-accent hover:bg-marketplace-accent/90 text-white py-6">
+                    Buy Now
+                  </Button>
+                </Link>
               </div>
               
               <p className="text-sm text-muted-foreground">
