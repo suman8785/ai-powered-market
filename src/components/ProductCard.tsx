@@ -3,12 +3,19 @@ import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/useCart";
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product.id, 1);
+  };
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
       <Link to={`/product/${product.id}`}>
@@ -49,7 +56,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         <div className="mt-4 flex space-x-2">
-          <Button className="w-full bg-marketplace-primary hover:bg-marketplace-primary/90 text-white">
+          <Button 
+            className="w-full bg-marketplace-primary hover:bg-marketplace-primary/90 text-white"
+            onClick={handleAddToCart}
+          >
             Add to Cart
           </Button>
         </div>
