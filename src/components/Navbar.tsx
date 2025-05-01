@@ -1,11 +1,25 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, Search, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/useCart";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cartItems } = useCart();
+  const navigate = useNavigate();
+  
+  // Calculate the total number of items in the cart
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const handleSearchClick = () => {
+    navigate('/products');
+  };
+
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
   
   return (
     <header className="border-b sticky top-0 bg-white z-50">
@@ -30,14 +44,16 @@ const Navbar = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" onClick={handleSearchClick}>
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" onClick={handleCartClick} className="relative">
             <ShoppingCart className="h-5 w-5" />
-            <span className="absolute top-1 right-1 bg-marketplace-primary text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-              0
-            </span>
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-marketplace-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <Menu className="h-5 w-5" />

@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
+import { Badge } from "@/components/ui/badge";
 
 interface ProductCardProps {
   product: Product;
