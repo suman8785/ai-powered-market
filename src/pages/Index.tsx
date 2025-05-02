@@ -18,10 +18,10 @@ const Index = () => {
       <section className="search-container relative py-20 md:py-32 flex items-center justify-center">
         <div className="container mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Find Amazing Products with AI
+            Find Your Perfect Stay with AI
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Our AI assistant helps you discover exactly what you're looking for
+            Discover unique accommodations and experiences tailored just for you
           </p>
           <SearchBar className="mx-auto" />
         </div>
@@ -31,7 +31,7 @@ const Index = () => {
       <section className="py-16">
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-semibold">Featured Products</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold">Featured Properties</h2>
             <Link to="/products">
               <Button variant="outline">View All</Button>
             </Link>
@@ -47,9 +47,9 @@ const Index = () => {
       {/* Categories Section */}
       <section className="py-16 bg-marketplace-light">
         <div className="container mx-auto">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-center">Shop by Category</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-center">Browse by Accommodation Type</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {["Electronics", "Home Decor", "Kitchen", "Accessories"].map((category) => (
+            {["Beach Houses", "Mountain Cabins", "City Apartments", "Countryside Villas"].map((category) => (
               <Link 
                 key={category} 
                 to={`/products?category=${encodeURIComponent(category)}`}
@@ -71,9 +71,9 @@ const Index = () => {
           <div className="bg-marketplace-primary/10 rounded-lg p-8 md:p-12">
             <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
               <div className="md:w-2/3">
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4">Need Help? Ask Our AI Assistant</h2>
+                <h2 className="text-2xl md:text-3xl font-semibold mb-4">Need Help Planning Your Stay?</h2>
                 <p className="text-lg mb-6">
-                  Get instant answers about products, orders, shipping, returns, and more!
+                  Our AI assistant can help with booking, local recommendations, and travel tips!
                 </p>
                 <Link to="/support">
                   <Button className="bg-marketplace-primary hover:bg-marketplace-primary/90">
