@@ -11,7 +11,7 @@ interface SearchBarProps {
   onSearch?: (query: string) => void;
 }
 
-const SearchBar = ({ placeholder = "Search for products...", className = "", onSearch }: SearchBarProps) => {
+const SearchBar = ({ placeholder = "Search for properties...", className = "", onSearch }: SearchBarProps) => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
@@ -42,8 +42,8 @@ const SearchBar = ({ placeholder = "Search for products...", className = "", onS
         <Search className="h-5 w-5 mr-2" />
         Search
       </Button>
-      <p className="absolute -bottom-6 text-xs text-white/80">
-        AI-powered search: "comfy chairs under $100", "gifts for tech lovers"
+      <p className="absolute -bottom-6 text-xs text-gray-500">
+        AI-powered search: "beachfront villa in Miami", "cozy 2-bedroom in mountains"
       </p>
     </form>
   );

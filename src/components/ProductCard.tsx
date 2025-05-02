@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, MapPin } from "lucide-react";
 import { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
@@ -20,7 +20,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
       <Link to={`/product/${product.id}`}>
-        <div className="relative w-full pb-[75%] overflow-hidden">
+        <div className="relative w-full pb-[66%] overflow-hidden">
           <img 
             src={product.images[0]} 
             alt={product.title}
@@ -37,31 +37,46 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="p-4">
         <div className="flex items-start justify-between">
           <div>
+            <div className="flex items-center text-sm text-muted-foreground mb-1">
+              <MapPin className="h-3 w-3 mr-1" />
+              {product.location}
+            </div>
             <Link to={`/product/${product.id}`} className="block">
               <h3 className="font-medium text-lg leading-tight hover:text-marketplace-primary transition">
                 {product.title}
               </h3>
             </Link>
-            <p className="text-sm text-muted-foreground mt-1">{product.category}</p>
+            <div className="text-sm text-muted-foreground mt-1">
+              <span>{product.bedrooms} bedroom{product.bedrooms !== 1 ? 's' : ''}</span>
+              <span className="mx-1">•</span>
+              <span>{product.bathrooms} bath{product.bathrooms !== 1 ? 's' : ''}</span>
+            </div>
           </div>
-          <p className="font-semibold text-marketplace-dark">${product.price.toFixed(2)}</p>
         </div>
 
-        <div className="flex items-center mt-2">
+        <div className="flex items-center justify-between mt-2">
           <div className="flex items-center">
             <Star className="h-4 w-4 fill-current text-yellow-400 mr-1" />
             <span className="text-sm font-medium">{product.rating}</span>
+            <span className="mx-1 text-muted-foreground text-sm">•</span>
+            <span className="text-sm text-muted-foreground">{product.reviews} reviews</span>
           </div>
-          <span className="mx-2 text-muted-foreground text-sm">•</span>
-          <span className="text-sm text-muted-foreground">{product.reviews} reviews</span>
+          <div>
+            {product.host.isSuperhost && (
+              <Badge variant="outline" className="text-xs">Superhost</Badge>
+            )}
+          </div>
         </div>
 
-        <div className="mt-4 flex space-x-2">
+        <div className="mt-2 flex items-center justify-between">
+          <div className="font-semibold text-marketplace-dark">${product.price.toFixed(2)} <span className="text-muted-foreground font-normal text-sm">/ night</span></div>
           <Button 
-            className="w-full bg-marketplace-primary hover:bg-marketplace-primary/90 text-white"
+            variant="ghost"
+            size="sm"
+            className="hover:bg-marketplace-primary/10 text-marketplace-primary"
             onClick={handleAddToCart}
           >
-            Add to Cart
+            Save
           </Button>
         </div>
       </div>

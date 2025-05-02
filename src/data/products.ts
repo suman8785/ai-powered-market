@@ -11,112 +11,203 @@ export interface Product {
   reviews: number;
   stock: number;
   tags: string[];
+  // Hotel specific fields
+  location: string;
+  amenities: string[];
+  bedrooms: number;
+  bathrooms: number;
+  guests: number;
+  host: {
+    name: string;
+    rating: number;
+    isSuperhost: boolean;
+  };
 }
 
 export const products: Product[] = [
   {
     id: "1",
-    title: "Modern Minimalist Desk Lamp",
-    description: "Sleek, adjustable desk lamp with touch controls and multiple brightness settings. Perfect for your home office or bedside table.",
-    price: 59.99,
-    images: ["https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&q=80"],
-    category: "Home Decor",
+    title: "Modern Loft in Downtown",
+    description: "Bright and airy loft in the heart of downtown with incredible city views. This stylish space features floor-to-ceiling windows, a fully equipped kitchen, and modern furnishings. Perfect for a weekend getaway or business trip.",
+    price: 129.99,
+    images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80"],
+    category: "Apartment",
     featured: true,
     rating: 4.8,
     reviews: 124,
-    stock: 45,
-    tags: ["lighting", "desk", "office", "modern", "minimalist"]
+    stock: 1,
+    tags: ["downtown", "city view", "modern", "loft"],
+    location: "Downtown, New York",
+    amenities: ["Wifi", "Kitchen", "Workspace", "Air conditioning", "TV"],
+    bedrooms: 1,
+    bathrooms: 1,
+    guests: 2,
+    host: {
+      name: "Emily",
+      rating: 4.9,
+      isSuperhost: true
+    }
   },
   {
     id: "2",
-    title: "Wireless Noise-Canceling Headphones",
-    description: "Premium wireless headphones with active noise cancellation, 30-hour battery life, and comfortable over-ear design.",
-    price: 199.99,
-    images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80"],
-    category: "Electronics",
+    title: "Beachfront Villa with Pool",
+    description: "Luxurious beachfront villa with private pool and direct beach access. Enjoy stunning ocean views from the terrace and fall asleep to the sound of waves. Perfect for families or groups looking for a relaxing beach vacation.",
+    price: 359.99,
+    images: ["https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&q=80"],
+    category: "Villa",
     featured: true,
     rating: 4.9,
     reviews: 302,
-    stock: 18,
-    tags: ["audio", "wireless", "headphones", "noise-canceling"]
+    stock: 1,
+    tags: ["beach", "pool", "ocean view", "luxury"],
+    location: "Miami Beach, Florida",
+    amenities: ["Pool", "Beach access", "Wifi", "Kitchen", "Free parking"],
+    bedrooms: 3,
+    bathrooms: 2,
+    guests: 6,
+    host: {
+      name: "Michael",
+      rating: 4.8,
+      isSuperhost: true
+    }
   },
   {
     id: "3",
-    title: "Organic Cotton Throw Blanket",
-    description: "Soft, eco-friendly throw blanket made from 100% organic cotton. Available in multiple colors to match any decor.",
-    price: 49.99,
-    images: ["https://images.unsplash.com/photo-1462927114214-6956d2fddd4e?auto=format&fit=crop&q=80"],
-    category: "Home Decor",
+    title: "Cozy Mountain Cabin",
+    description: "Charming cabin nestled in the mountains with a wood-burning fireplace and stunning forest views. Enjoy hiking nearby trails and relaxing on the deck overlooking the wilderness. Perfect for a romantic getaway or peaceful retreat.",
+    price: 149.99,
+    images: ["https://images.unsplash.com/photo-1518732714860-b62714ce0c59?auto=format&fit=crop&q=80"],
+    category: "Cabin",
     featured: false,
     rating: 4.7,
     reviews: 89,
-    stock: 32,
-    tags: ["blanket", "cotton", "organic", "home", "soft"]
+    stock: 1,
+    tags: ["mountains", "forest", "fireplace", "cozy"],
+    location: "Aspen, Colorado",
+    amenities: ["Fireplace", "Hot tub", "Wifi", "Mountain view", "BBQ grill"],
+    bedrooms: 2,
+    bathrooms: 1,
+    guests: 4,
+    host: {
+      name: "Sarah",
+      rating: 4.7,
+      isSuperhost: false
+    }
   },
   {
     id: "4",
-    title: "Portable Bluetooth Speaker",
-    description: "Waterproof, rugged Bluetooth speaker with 24-hour battery life and crisp, clear sound quality.",
-    price: 79.99,
-    images: ["https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&q=80"],
-    category: "Electronics",
+    title: "Historic Townhouse in Old Town",
+    description: "Beautiful restored townhouse in the historic district with original features and modern comforts. Walk to local attractions, restaurants, and shops. Experience the charm of old architecture with all the modern amenities.",
+    price: 179.99,
+    images: ["https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&q=80"],
+    category: "Townhouse",
     featured: true,
     rating: 4.6,
     reviews: 178,
-    stock: 27,
-    tags: ["speaker", "bluetooth", "portable", "waterproof", "audio"]
+    stock: 1,
+    tags: ["historic", "old town", "central", "charming"],
+    location: "Charleston, South Carolina",
+    amenities: ["Wifi", "Kitchen", "Washer", "Air conditioning", "Patio"],
+    bedrooms: 2,
+    bathrooms: 2,
+    guests: 4,
+    host: {
+      name: "Robert",
+      rating: 4.9,
+      isSuperhost: true
+    }
   },
   {
     id: "5",
-    title: "Handcrafted Ceramic Mug Set",
-    description: "Set of 4 handmade ceramic mugs, each with unique glazing patterns. Microwave and dishwasher safe.",
-    price: 39.99,
-    images: ["https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&q=80"],
-    category: "Kitchen",
+    title: "Minimalist Studio in Arts District",
+    description: "Modern studio apartment in the vibrant arts district. Clean lines, thoughtful design, and artistic touches throughout. Close to galleries, cafes, and the city's best restaurants. Ideal for creative travelers and art enthusiasts.",
+    price: 99.99,
+    images: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80"],
+    category: "Apartment",
     featured: false,
     rating: 4.8,
     reviews: 56,
-    stock: 15,
-    tags: ["mugs", "ceramic", "handcrafted", "kitchen", "coffee"]
+    stock: 1,
+    tags: ["studio", "arts district", "modern", "minimalist"],
+    location: "Portland, Oregon",
+    amenities: ["Wifi", "Kitchen", "Workspace", "Smart TV", "Bike storage"],
+    bedrooms: 1,
+    bathrooms: 1,
+    guests: 2,
+    host: {
+      name: "Alex",
+      rating: 4.6,
+      isSuperhost: false
+    }
   },
   {
     id: "6",
-    title: "Smart Fitness Tracker",
-    description: "Comprehensive fitness tracker with heart rate monitoring, sleep tracking, and 7-day battery life.",
-    price: 129.99,
-    images: ["https://images.unsplash.com/photo-1575311373937-040b8e97df37?auto=format&fit=crop&q=80"],
-    category: "Fitness",
+    title: "Luxury Penthouse with City Views",
+    description: "Stunning penthouse apartment with panoramic city views and upscale amenities. Features include a private terrace, gourmet kitchen, and floor-to-ceiling windows. Located in the heart of the financial district, close to everything.",
+    price: 299.99,
+    images: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80"],
+    category: "Penthouse",
     featured: true,
-    rating: 4.5,
+    rating: 4.9,
     reviews: 211,
-    stock: 23,
-    tags: ["fitness", "tracker", "smartwatch", "health", "exercise"]
+    stock: 1,
+    tags: ["luxury", "penthouse", "city view", "modern"],
+    location: "Chicago, Illinois",
+    amenities: ["Wifi", "Full kitchen", "Gym access", "Doorman", "Heated pool"],
+    bedrooms: 3,
+    bathrooms: 2,
+    guests: 6,
+    host: {
+      name: "Jessica",
+      rating: 5.0,
+      isSuperhost: true
+    }
   },
   {
     id: "7",
-    title: "Natural Bamboo Cutting Board",
-    description: "Sustainable bamboo cutting board with juice groove and handles. Durable and knife-friendly.",
-    price: 34.99,
-    images: ["https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&q=80"],
-    category: "Kitchen",
+    title: "Rustic Farmhouse Retreat",
+    description: "Charming farmhouse on 5 acres of private land with a pond and walking trails. Fully renovated interior with rustic touches and modern conveniences. Enjoy country living just 30 minutes from downtown. Perfect for families or friends.",
+    price: 189.99,
+    images: ["https://images.unsplash.com/photo-1438029071396-1e831a7fa6d8?auto=format&fit=crop&q=80"],
+    category: "Farmhouse",
     featured: false,
     rating: 4.7,
     reviews: 87,
-    stock: 41,
-    tags: ["bamboo", "cutting board", "kitchen", "sustainable", "eco-friendly"]
+    stock: 1,
+    tags: ["rustic", "farmhouse", "country", "pond"],
+    location: "Nashville, Tennessee",
+    amenities: ["Wifi", "Full kitchen", "Fireplace", "BBQ", "Pond access"],
+    bedrooms: 3,
+    bathrooms: 2,
+    guests: 8,
+    host: {
+      name: "Daniel",
+      rating: 4.8,
+      isSuperhost: true
+    }
   },
   {
     id: "8",
-    title: "Leather Laptop Sleeve",
-    description: "Genuine leather laptop sleeve with soft microfiber interior. Fits laptops up to 15 inches.",
-    price: 49.99,
-    images: ["https://images.unsplash.com/photo-1603899968034-1a55f783a927?auto=format&fit=crop&q=80"],
-    category: "Accessories",
+    title: "Oceanview Condo in Resort",
+    description: "Beautiful oceanview condo in a luxury resort with access to pools, beach, and restaurants. Enjoy sunset views from your private balcony and all the amenities of a high-end resort. Perfect for couples or small families looking for a relaxing beach vacation.",
+    price: 219.99,
+    images: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80"],
+    category: "Condo",
     featured: false,
     rating: 4.6,
     reviews: 64,
-    stock: 29,
-    tags: ["leather", "laptop", "sleeve", "accessories", "work"]
+    stock: 1,
+    tags: ["oceanview", "resort", "beach", "pool"],
+    location: "Maui, Hawaii",
+    amenities: ["Wifi", "Kitchen", "Pool access", "Beach access", "Air conditioning"],
+    bedrooms: 2,
+    bathrooms: 2,
+    guests: 4,
+    host: {
+      name: "Leilani",
+      rating: 4.9,
+      isSuperhost: true
+    }
   }
 ];
 

@@ -11,17 +11,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
+import { Bed, Bath, Users } from "lucide-react";
 
 const ProductList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [displayedProducts, setDisplayedProducts] = useState(allProducts);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState([0, 500]);
+  const [bedroomFilter, setBedroomFilter] = useState<number | null>(null);
+  const [bathroomFilter, setBathroomFilter] = useState<number | null>(null);
+  const [guestFilter, setGuestFilter] = useState<number | null>(null);
 
   // Get all unique categories
   const categories = [...new Set(allProducts.map(product => product.category))];
 
-  // Effect to filter products based on URL search params
+  // Effect to filter products based on URL search params and other filters
   useEffect(() => {
     const searchQuery = searchParams.get("search");
     const categoryFilter = searchParams.get("category");
@@ -41,8 +45,23 @@ const ProductList = () => {
       p => p.price >= priceRange[0] && p.price <= priceRange[1]
     );
     
+    // Apply bedroom filter if selected
+    if (bedroomFilter !== null) {
+      filtered = filtered.filter(p => p.bedrooms === bedroomFilter);
+    }
+    
+    // Apply bathroom filter if selected
+    if (bathroomFilter !== null) {
+      filtered = filtered.filter(p => p.bathrooms === bathroomFilter);
+    }
+    
+    // Apply guest filter if selected
+    if (guestFilter !== null) {
+      filtered = filtered.filter(p => p.guests >= guestFilter);
+    }
+    
     setDisplayedProducts(filtered);
-  }, [searchParams, priceRange]);
+  }, [searchParams, priceRange, bedroomFilter, bathroomFilter, guestFilter]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -69,7 +88,10 @@ const ProductList = () => {
   const clearFilters = () => {
     setSearchParams(new URLSearchParams());
     setSelectedCategory("");
-    setPriceRange([0, 200]);
+    setPriceRange([0, 500]);
+    setBedroomFilter(null);
+    setBathroomFilter(null);
+    setGuestFilter(null);
   };
 
   return (
@@ -83,10 +105,10 @@ const ProductList = () => {
               {searchParams.get("search") 
                 ? `Search Results: "${searchParams.get("search")}"` 
                 : searchParams.get("category") 
-                  ? `${searchParams.get("category")}` 
-                  : "All Products"}
+                  ? `${searchParams.get("category")} Properties` 
+                  : "All Properties"}
             </h1>
-            <SearchBar onSearch={handleSearch} className="max-w-2xl" />
+            <SearchBar onSearch={handleSearch} className="max-w-2xl" placeholder="Search for properties..." />
           </div>
           
           <div className="flex flex-col md:flex-row gap-8">
@@ -101,7 +123,7 @@ const ProductList = () => {
                 </div>
                 
                 <div className="mb-6">
-                  <h4 className="font-medium mb-2">Categories</h4>
+                  <h4 className="font-medium mb-2">Property Type</h4>
                   <div className="space-y-2">
                     <div className="flex items-center">
                       <Checkbox 
@@ -110,7 +132,7 @@ const ProductList = () => {
                         onCheckedChange={() => handleCategoryChange("")}
                       />
                       <Label htmlFor="all" className="ml-2 cursor-pointer">
-                        All Categories
+                        All Properties
                       </Label>
                     </div>
                     
@@ -131,12 +153,12 @@ const ProductList = () => {
                 
                 <Separator className="my-4" />
                 
-                <div>
-                  <h4 className="font-medium mb-4">Price Range</h4>
+                <div className="mb-6">
+                  <h4 className="font-medium mb-4">Price Range (per night)</h4>
                   <Slider
-                    defaultValue={[0, 200]}
+                    defaultValue={[0, 500]}
                     min={0}
-                    max={200}
+                    max={500}
                     step={10}
                     value={priceRange}
                     onValueChange={setPriceRange}
@@ -144,6 +166,81 @@ const ProductList = () => {
                   <div className="flex justify-between mt-2">
                     <span>${priceRange[0]}</span>
                     <span>${priceRange[1]}+</span>
+                  </div>
+                </div>
+                
+                <Separator className="my-4" />
+                
+                <div className="mb-6">
+                  <h4 className="font-medium mb-3">Bedrooms</h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      variant={bedroomFilter === null ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setBedroomFilter(null)}
+                    >
+                      Any
+                    </Button>
+                    {[1, 2, 3, 4, 5].map(num => (
+                      <Button 
+                        key={num}
+                        variant={bedroomFilter === num ? "default" : "outline"} 
+                        size="sm"
+                        onClick={() => setBedroomFilter(num)}
+                      >
+                        {num}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator className="my-4" />
+                
+                <div className="mb-6">
+                  <h4 className="font-medium mb-3">Bathrooms</h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      variant={bathroomFilter === null ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setBathroomFilter(null)}
+                    >
+                      Any
+                    </Button>
+                    {[1, 2, 3, 4].map(num => (
+                      <Button 
+                        key={num}
+                        variant={bathroomFilter === num ? "default" : "outline"} 
+                        size="sm"
+                        onClick={() => setBathroomFilter(num)}
+                      >
+                        {num}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator className="my-4" />
+                
+                <div>
+                  <h4 className="font-medium mb-3">Guests</h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      variant={guestFilter === null ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setGuestFilter(null)}
+                    >
+                      Any
+                    </Button>
+                    {[2, 4, 6, 8, 10].map(num => (
+                      <Button 
+                        key={num}
+                        variant={guestFilter === num ? "default" : "outline"} 
+                        size="sm"
+                        onClick={() => setGuestFilter(num)}
+                      >
+                        {num}+
+                      </Button>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -159,7 +256,7 @@ const ProductList = () => {
                 </div>
               ) : (
                 <div className="text-center py-16">
-                  <h3 className="text-xl font-medium mb-2">No products found</h3>
+                  <h3 className="text-xl font-medium mb-2">No properties found</h3>
                   <p className="text-muted-foreground mb-6">
                     Try adjusting your search or filter criteria
                   </p>
