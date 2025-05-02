@@ -30,19 +30,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = getProductById(id || "");
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { toast } = useToast();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [guestCount, setGuestCount] = useState<string>("1");
 
   const handleAddToCart = () => {
-    if (product && dateRange?.from && dateRange?.to) {
-      addToCart(product.id, quantity);
+    if (!product) {
+      toast({
+        title: "Error",
+        description: "Product not found",
+        variant: "destructive",
+      });
+      return;
     }
+    
+    if (!dateRange?.from || !dateRange?.to) {
+      toast({
+        title: "Please select dates",
+        description: "You must select check-in and check-out dates",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // If we have valid product and date range, add to cart
+    addToCart(product.id, parseInt(guestCount) || 1);
+    
+    toast({
+      title: "Reservation started",
+      description: `${product.title} added to cart for ${getTotalNights()} nights`,
+    });
   };
 
   // Calculate total price based on selected dates and base price
@@ -91,15 +115,15 @@ const ProductDetail = () => {
           
           {/* Property Title Section */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold">{product.title}</h1>
+            <h1 className="text-3xl font-bold">{product?.title}</h1>
             <div className="flex items-center flex-wrap gap-2 mt-2">
               <div className="flex items-center">
                 <Star className="h-4 w-4 fill-current text-yellow-400 mr-1" />
-                <span className="font-medium">{product.rating}</span>
+                <span className="font-medium">{product?.rating}</span>
                 <span className="mx-1">•</span>
-                <span className="text-muted-foreground">{product.reviews} reviews</span>
+                <span className="text-muted-foreground">{product?.reviews} reviews</span>
               </div>
-              {product.host.isSuperhost && (
+              {product?.host.isSuperhost && (
                 <>
                   <span className="mx-1 text-muted-foreground">•</span>
                   <Badge variant="outline">Superhost</Badge>
@@ -108,7 +132,7 @@ const ProductDetail = () => {
               <span className="mx-1 text-muted-foreground">•</span>
               <div className="flex items-center">
                 <MapPin className="h-4 w-4 mr-1" />
-                <span>{product.location}</span>
+                <span>{product?.location}</span>
               </div>
             </div>
           </div>
@@ -116,8 +140,8 @@ const ProductDetail = () => {
           {/* Property Image */}
           <div className="relative rounded-xl overflow-hidden bg-white shadow-md mb-8">
             <img 
-              src={product.images[0]} 
-              alt={product.title} 
+              src={product?.images[0]} 
+              alt={product?.title} 
               className="w-full h-[500px] object-cover"
             />
           </div>
@@ -212,14 +236,14 @@ const ProductDetail = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
+                      <span className="text-2xl font-bold">${product?.price.toFixed(2)}</span>
                       <span className="text-muted-foreground"> / night</span>
                     </div>
                     <div className="flex items-center">
                       <Star className="h-4 w-4 fill-current text-yellow-400 mr-1" />
-                      <span className="font-medium">{product.rating}</span>
+                      <span className="font-medium">{product?.rating}</span>
                       <span className="mx-1 text-muted-foreground">•</span>
-                      <span className="text-muted-foreground">{product.reviews} reviews</span>
+                      <span className="text-muted-foreground">{product?.reviews} reviews</span>
                     </div>
                   </div>
                   
@@ -241,7 +265,7 @@ const ProductDetail = () => {
                           <SelectValue placeholder="Select number of guests" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.from({ length: product.guests }, (_, i) => i + 1).map((num) => (
+                          {Array.from({ length: product?.guests || 1 }, (_, i) => i + 1).map((num) => (
                             <SelectItem key={num} value={num.toString()}>
                               {num} {num === 1 ? 'guest' : 'guests'}
                             </SelectItem>
