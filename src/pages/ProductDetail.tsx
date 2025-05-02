@@ -1,28 +1,61 @@
 
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { DateRange } from "react-day-picker";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getProductById } from "@/data/products";
 import { Button } from "@/components/ui/button";
-import { Star, MapPin, Users, Bed, Bath, Wifi, Check } from "lucide-react";
+import { 
+  Star, 
+  MapPin, 
+  Users, 
+  Bed, 
+  Bath, 
+  Wifi, 
+  Check,
+  Calendar,
+  Hotel
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/useCart";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { DateRangePicker } from "@/components/DateRangePicker";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = getProductById(id || "");
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [guestCount, setGuestCount] = useState<string>("1");
 
   const handleAddToCart = () => {
-    if (product) {
+    if (product && dateRange?.from && dateRange?.to) {
       addToCart(product.id, quantity);
     }
   };
+
+  // Calculate total price based on selected dates and base price
+  const getTotalNights = () => {
+    if (!dateRange?.from || !dateRange?.to) return 0;
+    const timeDiff = dateRange.to.getTime() - dateRange.from.getTime();
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  };
+
+  const totalNights = getTotalNights();
+  const cleaningFee = 85;
+  const serviceFee = 99;
+  const totalBeforeTaxes = product ? product.price * totalNights + cleaningFee + serviceFee : 0;
 
   if (!product) {
     return (
@@ -191,32 +224,39 @@ const ProductDetail = () => {
                   </div>
                   
                   <div className="border rounded-lg mb-4">
-                    <div className="grid grid-cols-2 divide-x">
-                      <div className="p-3">
-                        <div className="text-xs font-medium">CHECK-IN</div>
-                        <div className="text-sm">6/5/2025</div>
-                      </div>
-                      <div className="p-3">
-                        <div className="text-xs font-medium">CHECKOUT</div>
-                        <div className="text-sm">6/10/2025</div>
-                      </div>
+                    <div className="p-4">
+                      <div className="text-sm font-medium mb-2">DATES</div>
+                      <DateRangePicker 
+                        dateRange={dateRange}
+                        onDateRangeChange={setDateRange}
+                      />
                     </div>
-                    <div className="border-t p-3">
-                      <div className="text-xs font-medium mb-1">GUESTS</div>
-                      <select className="w-full text-sm bg-transparent">
-                        <option>1 guest</option>
-                        <option>2 guests</option>
-                        <option>3 guests</option>
-                        <option>4 guests</option>
-                      </select>
+                    <div className="border-t p-4">
+                      <div className="text-sm font-medium mb-2">GUESTS</div>
+                      <Select
+                        value={guestCount}
+                        onValueChange={setGuestCount}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select number of guests" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: product.guests }, (_, i) => i + 1).map((num) => (
+                            <SelectItem key={num} value={num.toString()}>
+                              {num} {num === 1 ? 'guest' : 'guests'}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   
                   <Button 
                     className="w-full bg-marketplace-primary hover:bg-marketplace-primary/90 text-white py-6 mb-4"
                     onClick={handleAddToCart}
+                    disabled={!dateRange?.from || !dateRange?.to}
                   >
-                    Reserve
+                    {dateRange?.from && dateRange?.to ? 'Reserve' : 'Select dates to reserve'}
                   </Button>
                   
                   <div className="text-center text-muted-foreground text-sm">
@@ -224,22 +264,24 @@ const ProductDetail = () => {
                   </div>
                   
                   <div className="mt-6 space-y-4">
-                    <div className="flex justify-between">
-                      <span className="underline">${product.price.toFixed(2)} x 5 nights</span>
-                      <span>${(product.price * 5).toFixed(2)}</span>
-                    </div>
+                    {totalNights > 0 && (
+                      <div className="flex justify-between">
+                        <span className="underline">${product.price.toFixed(2)} x {totalNights} nights</span>
+                        <span>${(product.price * totalNights).toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="underline">Cleaning fee</span>
-                      <span>$85.00</span>
+                      <span>${cleaningFee.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="underline">Service fee</span>
-                      <span>$99.00</span>
+                      <span>${serviceFee.toFixed(2)}</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between font-semibold">
                       <span>Total before taxes</span>
-                      <span>${(product.price * 5 + 85 + 99).toFixed(2)}</span>
+                      <span>${totalBeforeTaxes.toFixed(2)}</span>
                     </div>
                   </div>
                 </CardContent>
