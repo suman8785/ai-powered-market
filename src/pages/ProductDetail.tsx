@@ -9,6 +9,7 @@ import { Star, Truck, Package, Clock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/useCart";
+import { Card, CardContent } from "@/components/ui/card";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +43,14 @@ const ProductDetail = () => {
     );
   }
 
+  // Sample product highlights - you would ideally get these from the product data
+  const productHighlights = [
+    "Premium quality materials",
+    "Handcrafted with attention to detail",
+    "Environmentally sustainable production",
+    "Exclusive limited edition design"
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -71,9 +80,14 @@ const ProductDetail = () => {
             
             {/* Product Info */}
             <div>
-              <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold">{product.title}</h1>
+                <div className="text-3xl font-bold text-marketplace-primary">
+                  ${product.price.toFixed(2)}
+                </div>
+              </div>
               
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mt-2 mb-6">
                 <div className="flex items-center">
                   <Star className="h-4 w-4 fill-current text-yellow-400 mr-1" />
                   <span className="font-medium">{product.rating}</span>
@@ -84,24 +98,36 @@ const ProductDetail = () => {
                 <span className="text-green-600 font-medium">In Stock ({product.stock})</span>
               </div>
               
-              <div className="text-3xl font-bold mb-6">
-                ${product.price.toFixed(2)}
-              </div>
-              
-              <p className="text-muted-foreground mb-6">
-                {product.description}
-              </p>
+              {/* Airbnb-style description card */}
+              <Card className="mb-6 bg-gray-50 border-none shadow-sm">
+                <CardContent className="p-6">
+                  <h2 className="text-xl font-semibold mb-4">About this product</h2>
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    {product.description}
+                  </p>
+                  
+                  <h3 className="font-medium text-lg mb-3">Highlights</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {productHighlights.map((highlight, index) => (
+                      <div key={index} className="flex items-center">
+                        <span className="text-marketplace-primary mr-2">•</span>
+                        <span>{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="flex flex-col items-center border rounded-md p-4 text-center">
+                <div className="flex flex-col items-center border rounded-md p-4 text-center bg-white shadow-sm hover:shadow transition-shadow">
                   <Truck className="h-5 w-5 mb-2 text-marketplace-secondary" />
                   <span className="text-sm font-medium">Free Shipping</span>
                 </div>
-                <div className="flex flex-col items-center border rounded-md p-4 text-center">
+                <div className="flex flex-col items-center border rounded-md p-4 text-center bg-white shadow-sm hover:shadow transition-shadow">
                   <Package className="h-5 w-5 mb-2 text-marketplace-secondary" />
                   <span className="text-sm font-medium">Easy Returns</span>
                 </div>
-                <div className="flex flex-col items-center border rounded-md p-4 text-center">
+                <div className="flex flex-col items-center border rounded-md p-4 text-center bg-white shadow-sm hover:shadow transition-shadow">
                   <Clock className="h-5 w-5 mb-2 text-marketplace-secondary" />
                   <span className="text-sm font-medium">2-Day Delivery</span>
                 </div>
@@ -110,16 +136,16 @@ const ProductDetail = () => {
               <Separator className="my-6" />
               
               <div className="flex flex-wrap md:flex-nowrap items-center gap-4 mb-6">
-                <div className="flex items-center border rounded">
+                <div className="flex items-center border rounded-md shadow-sm bg-white">
                   <button 
-                    className="px-4 py-2 border-r text-lg"
+                    className="px-4 py-2 border-r text-lg hover:bg-gray-50"
                     onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                   >
                     -
                   </button>
-                  <span className="px-6 py-2">{quantity}</span>
+                  <span className="px-6 py-2 font-medium">{quantity}</span>
                   <button 
-                    className="px-4 py-2 border-l text-lg"
+                    className="px-4 py-2 border-l text-lg hover:bg-gray-50"
                     onClick={() => setQuantity(prev => Math.min(product.stock, prev + 1))}
                   >
                     +
@@ -140,36 +166,37 @@ const ProductDetail = () => {
                 </Link>
               </div>
               
-              <p className="text-sm text-muted-foreground">
-                Category: <span className="text-marketplace-dark">{product.category}</span>
-              </p>
-              
-              <div className="flex flex-wrap gap-2 mt-2">
-                {product.tags.map(tag => (
-                  <div key={tag} className="bg-marketplace-light px-2 py-1 rounded-full text-xs">
-                    {tag}
-                  </div>
-                ))}
+              <div className="flex items-center text-sm text-muted-foreground space-x-4">
+                <div>
+                  Category: <span className="text-marketplace-dark font-medium">{product.category}</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {product.tags.map(tag => (
+                    <div key={tag} className="bg-marketplace-light px-2 py-1 rounded-full text-xs">
+                      {tag}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
           
           <div className="mt-12">
             <Tabs defaultValue="details">
-              <TabsList className="w-full max-w-md mx-auto grid grid-cols-3">
+              <TabsList className="w-full max-w-md mx-auto grid grid-cols-3 bg-gray-50">
                 <TabsTrigger value="details">Product Details</TabsTrigger>
                 <TabsTrigger value="reviews">Reviews</TabsTrigger>
                 <TabsTrigger value="shipping">Shipping</TabsTrigger>
               </TabsList>
               
-              <div className="mt-8 border rounded-lg p-6">
+              <div className="mt-8 border rounded-lg p-6 bg-white shadow-sm">
                 <TabsContent value="details" className="space-y-4">
                   <h3 className="text-xl font-medium">Product Details</h3>
-                  <p>
+                  <p className="leading-relaxed text-gray-700">
                     {product.description} This premium product is designed to provide exceptional 
                     quality and performance. Made from high-quality materials and built to last.
                   </p>
-                  <ul className="list-disc pl-5 space-y-2">
+                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
                     <li>High-quality construction</li>
                     <li>Designed for everyday use</li>
                     <li>Stylish and functional design</li>
@@ -192,7 +219,7 @@ const ProductDetail = () => {
                         </div>
                         <span className="ml-2 font-medium">Amazing product!</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">
+                      <p className="text-sm text-gray-700 mb-1">
                         This product exceeded all my expectations. The quality is outstanding and 
                         it works perfectly for what I need.
                       </p>
@@ -211,7 +238,7 @@ const ProductDetail = () => {
                         </div>
                         <span className="ml-2 font-medium">Great value</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">
+                      <p className="text-sm text-gray-700 mb-1">
                         Very satisfied with my purchase. It's well made and works as described.
                         Would recommend to others looking for a quality product.
                       </p>
@@ -225,7 +252,7 @@ const ProductDetail = () => {
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-medium">Delivery Times</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-gray-700">
                         Standard Shipping: 3-5 business days<br />
                         Express Shipping: 1-2 business days (additional fee)
                       </p>
@@ -233,7 +260,7 @@ const ProductDetail = () => {
                     
                     <div>
                       <h4 className="font-medium">Return Policy</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-gray-700">
                         We accept returns within 30 days of delivery. Items must be unused, 
                         in the same condition that you received them, and in the original packaging.
                       </p>
